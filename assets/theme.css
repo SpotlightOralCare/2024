@@ -3645,7 +3645,7 @@ product-rerender {
   --announcement-bar-gutter: .625rem;
   place-content: center;
   column-gap: .75rem;
-  padding-block: 1em;
+  padding-block: 0.5em;
   padding-inline-start: max(var(--announcement-bar-gutter), 50% - var(--container-max-width) / 2);
   padding-inline-end: max(var(--announcement-bar-gutter), 50% - var(--container-max-width) / 2);
   display: flex;
