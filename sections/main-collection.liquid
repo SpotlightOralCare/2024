@@ -150,7 +150,7 @@ LIQUID
                     <x-listbox class="popover__value-list">
                       {%- for sort_option in collection.sort_options -%}
                         {%- if sort_option.name != blank -%}
-                          <button type="button" class="popover-listbox__option group" role="option" value="{{ sort_option.value }}" {% if sort_option.value == selected_sort_by_value %}aria-selected="true"{% endif %}>
+                          <button type="button" class="popover__value-option group" role="option" value="{{ sort_option.value }}" {% if sort_option.value == selected_sort_by_value %}aria-selected="true"{% endif %}>
                             <span class="reversed-link">{{ sort_option.name }}</span>
                           </button>
                         {%- endif -%}
@@ -192,7 +192,10 @@ LIQUID
 
                 <div slot="footer">
                   {%- assign button_content = 'collection.faceting.apply_filters' | t -%}
-                  {%- render 'button', type: 'button', content: button_content, stretch: true, is: 'dialog-close-button' -%}
+
+                  <dialog-close-button class="contents">
+                    {%- render 'button', type: 'button', content: button_content, stretch: true -%}
+                  </dialog-close-button>
                 </div>
               </facets-drawer>
 
@@ -205,11 +208,14 @@ LIQUID
 
             {%- if collection.products_count == 0 -%}
               <div class="empty-state">
-                <div class="prose">
+                <div class="v-stack gap-4">
                   <p>{{ 'collection.faceting.no_results' | t }}</p>
 
                   {%- assign button_content = 'collection.faceting.clear_filters' | t -%}
-                  {%- render 'button', href: collection.url, is: 'facet-link', content: button_content -%}
+
+                  <facet-link>
+                    {%- render 'button', href: collection.url, content: button_content -%}
+                  </facet-link>
                 </div>
               </div>
             {%- else -%}
@@ -218,7 +224,7 @@ LIQUID
 
                 <product-list id="product-list-{{ section.id }}" class="product-list" collection-mobile-layout="{{ products_mobile_grid_mode }}" collection-desktop-layout="{{ products_desktop_grid_mode }}">
                   {%- for product in collection.products -%}
-                    {%- render 'product-card', product: product, reveal: settings.stagger_products_apparition, hide_product_information: section.settings.hide_product_information, stacked: true -%}
+                    {%- render 'product-card', product: product, reveal: settings.stagger_products_apparition, position: forloop.index, hide_product_information: section.settings.hide_product_information, stacked: true -%}
                   {%- endfor -%}
                 </product-list>
 

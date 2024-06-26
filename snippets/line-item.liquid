@@ -50,7 +50,7 @@ Supported variables
           <p class="text-subdued">{{ line_item.selling_plan_allocation.selling_plan.name }}</p>
         {%- endif -%}
 
-        {%- unless line_item.properties == blank -%}
+        {%- unless line_item.properties == empty -%}
           <ul class="text-subdued">
             {%- for property in line_item.properties -%}
               {%- assign first_character_in_key = property.first | truncate: 1, '' -%}

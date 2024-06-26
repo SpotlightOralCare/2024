@@ -18,7 +18,7 @@ Supported variables
 * show_rules: if true, the quantity rules are displayed below the selector
 {%- endcomment -%}
 
-<quantity-selector {% if form != blank %}form="{{ form }}"{% endif %} class="quantity-selector {% if size %}quantity-selector--{{ size }}{% endif %}">
+<quantity-selector class="quantity-selector {% if size %}quantity-selector--{{ size }}{% endif %}">
   {%- comment -%}
   IMPLEMENTATION NOTE: we distinguish the case of a product quantity selector and a cart quantity selector. In the case
   of cart, we reload the page fully when the quantity changes (or re-render it in Ajax for the mini-cart). This is done
@@ -53,7 +53,9 @@ Supported variables
       {%- render 'icon' with 'minus', width: 10 -%}
     </a>
 
-    <input class="quantity-selector__input {% if size == 'sm' %}text-sm{% endif %}" type="number" is="quantity-input" value="{{ line_item.quantity }}" {% if add_updates %}name="updates[]"{% endif %} inputmode="numeric" {% comment %}step="{{ variant.quantity_rule.increment }}" min="{{ variant.quantity_rule.min }}"{% endcomment %} {% if max_quantity != blank %}max="{{ max_quantity | at_least: line_item.quantity }}"{% endif %} data-line-key="{{ line_item.key }}" aria-label="{{ 'product.quantity.change_quantity' | t | escape }}">
+    <quantity-input>
+      <input class="quantity-selector__input {% if size == 'sm' %}text-sm{% endif %}" type="number" value="{{ line_item.quantity }}" {% if add_updates %}name="updates[]"{% endif %} inputmode="numeric" {% comment %}step="{{ variant.quantity_rule.increment }}" min="{{ variant.quantity_rule.min }}"{% endcomment %} {% if max_quantity != blank %}max="{{ max_quantity | at_least: line_item.quantity }}"{% endif %} data-line-key="{{ line_item.key }}" aria-label="{{ 'product.quantity.change_quantity' | t | escape }}">
+    </quantity-input>
 
     {%- if max_quantity != blank and line_item.quantity == max_quantity -%}
       <button class="quantity-selector__button" disabled data-tooltip="{{ 'product.quantity.cannot_add_more' | t | escape }}">
@@ -78,7 +80,9 @@ Supported variables
       {%- render 'icon' with 'minus', width: 10 -%}
     </button>
 
-    <input class="quantity-selector__input {% if size == 'sm' %}text-sm{% endif %}" type="number" is="quantity-input" value="1" name="quantity" form="{{ form }}" inputmode="numeric" {% comment %}step="{{ variant.quantity_rule.increment }}" min="{{ variant.quantity_rule.min }}"{% endcomment %} aria-label="{{ 'product.quantity.change_quantity' | t | escape }}">
+    <quantity-input>
+      <input class="quantity-selector__input {% if size == 'sm' %}text-sm{% endif %}" type="number" value="1" name="quantity" form="{{ form }}" inputmode="numeric" {% comment %}step="{{ variant.quantity_rule.increment }}" min="{{ variant.quantity_rule.min }}"{% endcomment %} aria-label="{{ 'product.quantity.change_quantity' | t | escape }}">
+    </quantity-input>
 
     <button class="quantity-selector__button">
       <span class="sr-only">{{ 'product.quantity.decrease_quantity' | t }}</span>

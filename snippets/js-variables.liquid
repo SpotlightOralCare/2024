@@ -1,6 +1,4 @@
 <script>
-  document.documentElement.classList.replace('no-js', 'js');
-
   // This allows to expose several variables to the global scope, to be used in scripts
   window.themeVariables = {
     settings: {
@@ -14,17 +12,10 @@
     },
 
     strings: {
-      addToCartButton: {{ 'product.general.add_to_cart_button' | t | json }},
-      soldOutButton: {{ 'product.general.sold_out_button' | t | json }},
-      preOrderButton: {{ 'product.general.pre_order_button' | t | json }},
-      unavailableButton: {{ 'product.general.unavailable_button' | t | json }},
       addedToCart: {{ 'product.general.added_to_cart' | t | json }},
       closeGallery: {{ 'product.gallery.close' | t | json }},
       zoomGallery: {{ 'product.gallery.zoom' | t | json }},
       errorGallery: {{ 'product.gallery.error' | t | json }},
-      soldOutBadge: {{ 'product.general.sold_out_badge' | t | json }},
-      discountBadge: {{ 'product.general.discount_badge_html' | t: savings: '@@' | json }},
-      sku: {{ 'product.general.sku' | t | json }},
       shippingEstimatorNoResults: {{ 'cart.shipping_estimator.no_results' | t | json }},
       shippingEstimatorOneResult: {{ 'cart.shipping_estimator.one_result' | t | json }},
       shippingEstimatorMultipleResults: {{ 'cart.shipping_estimator.multiple_results' | t | json }},

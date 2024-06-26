@@ -343,7 +343,7 @@
       "name": "Animation",
       "minimize_motion_paragraph": "Users who configured their preferences to minimize non-essential motion will automatically experience reduced animations.",
       "show_page_transition": "Show page transition",
-      "show_page_transition_info": "Fade in and out when the page changes.",
+      "show_page_transition_info": "Fade in and out when the page changes. This effect can impact negatively the performance of your store. Keep this option disabled when prioritizing performance.",
       "show_button_transition": "Show button transition",
       "show_image_zoom_on_hover": "Show image zoom on hover",
       "show_image_zoom_on_hover_info": "Applies to different sections such as collection list, mega-menu...",

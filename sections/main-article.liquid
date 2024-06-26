@@ -47,12 +47,14 @@
   {%- endif -%}
 
   {%- if section.settings.show_image and article.image -%}
-    {%- if section.settings.enable_parallax -%}
-      {%- assign is_attribute = 'image-parallax' -%}
-    {%- endif -%}
-
     <div class="article__image">
-      {{- article.image | image_url: width: article.image.width | image_tag: is: is_attribute, widths: '200,300,400,500,600,700,800,900,1000,1200,1400,1600,1800,2000,2200,2400,2600,2800,3000,3200', class: 'w-full' -}}
+      {%- if section.settings.enable_parallax -%}
+        <image-parallax class="contents">
+          {{- article.image | image_url: width: article.image.width | image_tag: widths: '200,300,400,500,600,700,800,900,1000,1200,1400,1600,1800,2000,2200,2400,2600,2800,3000,3200', class: 'w-full' -}}
+        </image-parallax>
+      {%- else -%}
+        {{- article.image | image_url: width: article.image.width | image_tag: widths: '200,300,400,500,600,700,800,900,1000,1200,1400,1600,1800,2000,2200,2400,2600,2800,3000,3200', class: 'w-full' -}}
+      {%- endif -%}
     </div>
   {%- endif -%}
 

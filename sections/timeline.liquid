@@ -17,6 +17,14 @@
           {%- for block in section.blocks -%}
             <div class="timeline__item color-scheme color-scheme--{{ section.settings.item_color_scheme.id }} {% if forloop.first %}is-selected{% endif %}" style="--timeline-item-mobile-text-color: {{ block.settings.mobile_text_color.rgb }}" {{ block.shopify_attributes }}>
               <div class="timeline__item-image-wrapper">
+                {%- liquid
+                  assign loading_strategy = nil
+
+                  if section.index <= 3 and forloop.position <= 3
+                    assign loading_strategy = 'eager'
+                  endif
+                -%}
+
                 {%- if block.settings.image -%}
                   <picture>
                     {%- if block.settings.mobile_image -%}
@@ -28,7 +36,7 @@
                       >
                     {%- endif -%}
 
-                    {{- block.settings.image | image_url: width: block.settings.image.width | image_tag: loading: 'lazy', sizes: 'min(50vw, 575px)', widths: '600,700,800,1000,1200,1400,1600,1800', class: 'image-cover' -}}
+                    {{- block.settings.image | image_url: width: block.settings.image.width | image_tag: loading: loading_strategy, sizes: 'min(50vw, 575px)', widths: '600,700,800,1000,1200,1400,1600,1800', class: 'image-cover' -}}
                   </picture>
                 {%- else -%}
                   {%- capture placeholder_image -%}lifestyle-{% cycle '1', '2' %}{%- endcapture -%}

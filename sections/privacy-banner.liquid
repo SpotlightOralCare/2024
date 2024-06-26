@@ -1,8 +1,10 @@
 <privacy-banner class="pop-in privacy-banner color-scheme color-scheme--{{ section.settings.color_scheme.id }}" handle-editor-events>
-  <button class="pop-in__close-button tap-area" is="dialog-close-button">
-    <span class="sr-only">{{ 'general.accessibility.close' | t }}</span>
-    {%- render 'icon' with 'close' -%}
-  </button>
+  <dialog-close-button class="contents">
+    <button class="pop-in__close-button tap-area">
+      <span class="sr-only">{{ 'general.accessibility.close' | t }}</span>
+      {%- render 'icon' with 'close' -%}
+    </button>
+  </dialog-close-button>
 
   <div class="v-stack gap-4">
     {%- if section.settings.title != blank -%}

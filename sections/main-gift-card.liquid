@@ -18,7 +18,7 @@
       {%- if image != blank -%}
         {{- image | image_url: width: image.width | image_tag: sizes: '270px', widths: '270,540,810', class: 'gift-card__image' -}}
       {%- else -%}
-        <img src="{{ 'gift-card/card.svg' | shopify_asset_url }}" class="gift-card__image" alt="" width="270" height="180">
+        <img src="{{ 'gift-card/card.svg' | shopify_asset_url }}" class="gift-card__image" loading="eager" alt="" width="270" height="180">
       {%- endif -%}
 
       <!-- GIFT CARD INFO -->
@@ -60,7 +60,10 @@
 
               <div class="button-group button-group--same-width justify-center">
                 <button type="button" class="button w-full" onclick="window.print()">{{ 'gift_card.general.print' | t }}</button>
-                <button type="button" class="button button--secondary w-full" is="copy-button" data-text="{{ gift_card.code | escape }}" data-success-message="{{ 'gift_card.issued.copied' | t }}">{{ 'gift_card.general.copy' | t }}</button>
+
+                <copy-button data-text="{{ gift_card.code | escape }}" data-success-message="{{ 'gift_card.issued.copied' | t }}">
+                  <button type="button" class="button button--secondary w-full">{{ 'gift_card.general.copy' | t }}</button>
+                </copy-button>
               </div>
             </div>
 

@@ -3,17 +3,19 @@
     {%- assign posted_successfully = false -%}
     {%- assign newsletter_id = 'newsletter-' | append: section.id -%}
 
-    {%- capture temporary -%}
+    {%- capture _temporary -%}
       {%- form 'customer', id: newsletter_id, class: 'form' -%}
         {%- assign posted_successfully = form.posted_successfully? -%}
       {%- endform -%}
     {%- endcapture -%}
 
     <newsletter-popup class="pop-in newsletter-popup color-scheme color-scheme--{{ section.settings.color_scheme.id }}" title="Newsletter popup" {% if section.settings.show_only_once %}only-once{% endif %} apparition-delay="{{ section.settings.apparition_delay }}" {% if posted_successfully %}open{% endif %} handle-editor-events>
-      <button class="pop-in__close-button tap-area" is="dialog-close-button">
-        <span class="sr-only">{{ 'general.accessibility.close' | t }}</span>
-        {%- render 'icon' with 'close' -%}
-      </button>
+      <dialog-close-button class="contents">
+        <button class="pop-in__close-button tap-area">
+          <span class="sr-only">{{ 'general.accessibility.close' | t }}</span>
+          {%- render 'icon' with 'close' -%}
+        </button>
+      </dialog-close-button>
 
       <div class="v-stack gap-8">
         {%- if section.settings.title != blank or section.settings.content != blank -%}

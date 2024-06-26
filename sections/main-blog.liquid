@@ -82,7 +82,7 @@
                   </div>
                 {%- endif -%}
 
-                {%- render 'blog-post-card', article: article, blog: blog, show_category: section.settings.show_category, show_excerpt: section.settings.show_excerpt, show_read_more: section.settings.show_read_more, sizes: sizes -%}
+                {%- render 'blog-post-card', article: article, blog: blog, show_category: section.settings.show_category, show_date: section.settings.show_date, show_excerpt: section.settings.show_excerpt, show_read_more: section.settings.show_read_more, sizes: sizes, position: forloop.index -%}
               {%- endfor -%}
             </blog-posts>
 
@@ -160,6 +160,12 @@
       "label": "t:global.blog.show_category",
       "info": "t:global.blog.show_category_info",
       "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "show_date",
+      "label": "t:global.blog.show_date",
+      "default": false
     },
     {
       "type": "checkbox",

@@ -38,103 +38,120 @@
 </style>
 
 {%- assign color_scheme_hash = section.settings.color_scheme.settings.background_gradient | default: section.settings.color_scheme.settings.background | md5 -%}
+{%- capture product_form_id -%}product-form-main-{{ product.id }}-{{ section.id }}{%- endcapture -%}
 
 <div class="section-spacing section-spacing--tight color-scheme color-scheme--{{ section.settings.color_scheme.id }} color-scheme--bg-{{ color_scheme_hash }}">
   <div class="container {% unless section.settings.container_size == 'full' %}container--{{ section.settings.container_size }}{% endunless %}">
-    <div class="product">
-      {%- if product.media.size > 0 -%}
-        {%- render 'product-gallery',
-            product: product,
-            desktop_layout: section.settings.desktop_media_layout,
-            mobile_controls: section.settings.mobile_controls,
-            enable_media_autoplay: section.settings.enable_media_autoplay,
-            enable_video_looping: section.settings.enable_video_looping,
-            enable_image_zoom: section.settings.enable_image_zoom,
-            max_image_zoom_level: section.settings.max_image_zoom_level -%}
-      {%- endif -%}
+    <product-rerender id="product-info-{{ product.id }}-{{ section.id }}" observe-form="{{ product_form_id }}" allow-partial-rerender>
+      <div class="product">
+        {%- if product.media.size > 0 -%}
+          {%- render 'product-gallery',
+              product: product,
+              product_form_id: product_form_id,
+              desktop_layout: section.settings.desktop_media_layout,
+              mobile_controls: section.settings.mobile_controls,
+              enable_media_autoplay: section.settings.enable_media_autoplay,
+              enable_video_looping: section.settings.enable_video_looping,
+              enable_image_zoom: section.settings.enable_image_zoom,
+              max_image_zoom_level: section.settings.max_image_zoom_level -%}
+        {%- endif -%}
 
-      {%- render 'product-info', product: product, center_basic_info: section.settings.center_basic_info, has_content_below_gallery: has_content_below_gallery, update_url: true -%}
+        {%- render 'product-info', 
+          product: product, 
+          product_form_id: product_form_id,
+          center_basic_info: section.settings.center_basic_info, 
+          has_content_below_gallery: has_content_below_gallery, 
+          context: 'main_product' 
+        -%}
 
-      {%- comment -%}On Prestige, some content may be on the left part below the product gallery{%- endcomment -%}
-      {%- if has_content_below_gallery -%}
-        <div id="product-extra-information" class="product-content-below-gallery empty:hidden scroll-margin-offset">
-          {%- for block in section.blocks -%}
-            {%- unless block.settings.show_below_gallery -%}
-              {%- continue -%}
-            {%- endunless -%}
+        {%- comment -%}On Prestige, some content may be on the left part below the product gallery{%- endcomment -%}
+        {%- if has_content_below_gallery -%}
+          <div id="product-extra-information" class="product-content-below-gallery empty:hidden scroll-margin-offset">
+            {%- for block in section.blocks -%}
+              {%- unless block.settings.show_below_gallery -%}
+                {%- continue -%}
+              {%- endunless -%}
 
-            {%- case block.type -%}
-              {%- when 'description' -%}
-                {%- if product.description != blank -%}
-                  {%- if block.settings.collapse_content -%}
-                    {%- assign accordion_title = 'product.general.description' | t -%}
-                    {%- render 'accordion', title: accordion_title, content: product.description, prose_content: true, size: 'lg', block: block -%}
-                  {%- else -%}
-                    <div class="product-content-below-gallery__description prose">
-                      {{- product.description -}}
-                    </div>
+              {%- case block.type -%}
+                {%- when 'description' -%}
+                  {%- if product.description != blank -%}
+                    {%- if block.settings.collapse_content -%}
+                      {%- assign accordion_title = 'product.general.description' | t -%}
+                      {%- render 'accordion', title: accordion_title, content: product.description, prose_content: true, size: 'lg', block: block -%}
+                    {%- else -%}
+                      <div class="product-content-below-gallery__description prose">
+                        {{- product.description -}}
+                      </div>
+                    {%- endif -%}
                   {%- endif -%}
-                {%- endif -%}
 
-              {%- when 'accordion' -%}
-                {%- liquid
-                  assign accordion_title = block.settings.title | default: block.settings.page.title
-                  assign accordion_content = block.settings.page.content | default: block.settings.liquid | default: block.settings.content
+                {%- when 'accordion' -%}
+                  {%- liquid
+                    assign accordion_title = block.settings.title | default: block.settings.page.title
+                    assign accordion_content = block.settings.page.content | default: block.settings.liquid | default: block.settings.content
 
-                  if accordion_title != blank and accordion_content != blank
-                    render 'accordion', title: accordion_title, content: accordion_content, size: 'lg', prose_content: true, icon: block.settings.icon, custom_icon: block.settings.custom_icon, block: block
-                  endif
-                -%}
+                    if accordion_title != blank and accordion_content != blank
+                      render 'accordion', title: accordion_title, content: accordion_content, size: 'lg', prose_content: true, icon: block.settings.icon, custom_icon: block.settings.custom_icon, block: block
+                    endif
+                  -%}
 
-              {%- when 'complementary_products' -%}
-                {%- render 'complementary-products', product: product, block: block -%}
-            {%- endcase -%}
-          {%- endfor -%}
-        </div>
-      {%- endif -%}
-    </div>
+                {%- when 'complementary_products' -%}
+                  {%- render 'complementary-products', product: product, block: block -%}
+              {%- endcase -%}
+            {%- endfor -%}
+          </div>
+        {%- endif -%}
+      </div>
+    </product-rerender>
   </div>
 </div>
 
 {%- if section.settings.show_sticky_add_to_cart and product.available -%}
-  {%- capture form_id -%}product-form-{{ product.id }}-{{ section.id }}{%- endcapture -%}
-
-  <product-sticky-bar form="{{ form_id }}" class="product-sticky-bar">
-    <div class="product-sticky-bar__info sm-max:hidden">
-      <div class="h-stack gap-6">
-        {%- if product.media.size > 0 -%}
-          <variant-media widths="60,120,180" form="{{ form_id }}">
-            {%- assign default_media = product.selected_or_first_available_variant.media | default: product.featured_media -%}
+  <product-rerender id="{{ product_form_id }}-sticky-bar" observe-form="{{ product_form_id }}">
+    <product-sticky-bar form="{{ product_form_id }}" class="product-sticky-bar">
+      <div class="product-sticky-bar__info sm-max:hidden">
+        <div class="h-stack gap-6">
+          {%- if product.media.size > 0 -%}
+            {%- assign default_media = product.selected_or_first_available_variant.featured_media | default: product.featured_media -%}
             {{- default_media | image_url: width: default_media.width | image_tag: loading: 'lazy', sizes: '60px', widths: '60,120,180' -}}
-          </variant-media>
-        {%- endif -%}
+          {%- endif -%}
 
-        <div class="v-stack">
-          <span class="h6">{{ product.title }}</span>
-          {%- render 'price-list', variant: product.selected_or_first_available_variant, form_id: form_id, hide_unit_price: true, context: 'card' -%}
+          <div class="v-stack">
+            <span class="h6">{{ product.title }}</span>
+
+            {%- if product.selected_or_first_available_variant != nil -%}
+              {%- render 'price-list', variant: product.selected_or_first_available_variant, hide_unit_price: true, context: 'card' -%}
+            {%- endif -%}
+          </div>
         </div>
       </div>
-    </div>
 
-    <buy-buttons class="buy-buttons" template="{{ product.template_suffix | escape }}" form="{{ form_id }}">
-      {%- liquid
-        assign button_disabled = false
+      <buy-buttons class="buy-buttons" template="{{ product.template_suffix | escape }}" form="{{ product_form_id }}">
+        {%- liquid
+          assign button_disabled = false
+          assign button_style = 'solid'
 
-        if product.selected_or_first_available_variant.available == false
-          assign button_disabled = true
-          assign button_content = 'product.general.sold_out_button' | t
-        else
-          if product.template_suffix contains 'pre-order'
-            assign button_content = 'product.general.pre_order_button' | t
+          if product.selected_or_first_available_variant == nil
+            assign button_disabled = true
+            assign button_style = 'outline'
+            assign button_content = 'product.general.unavailable_button' | t
+          elsif product.selected_or_first_available_variant.available == false
+            assign button_disabled = true
+            assign button_style = 'outline'
+            assign button_content = 'product.general.sold_out_button' | t
           else
-            assign button_content = 'product.general.add_to_cart_button' | t
+            if product.template_suffix contains 'pre-order'
+              assign button_content = 'product.general.pre_order_button' | t
+            else
+              assign button_content = 'product.general.add_to_cart_button' | t
+            endif
           endif
-        endif
-      -%}
+        -%}
 
-      {%- render 'button', content: button_content, type: 'submit', form: form_id, disabled: button_disabled -%}
-    </buy-buttons>
-  </product-sticky-bar>
+        {%- render 'button', content: button_content, style: button_style, type: 'submit', form: product_form_id, disabled: button_disabled -%}
+      </buy-buttons>
+    </product-sticky-bar>
+  </product-rerender>
 {%- endif -%}
 
 {%- comment -%}

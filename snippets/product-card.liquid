@@ -12,6 +12,7 @@ Supported variables
 * product: the product to render
 * stacked: define if the product is stacked or not on mobile
 * reveal: if set to true, the card will be revealed on scroll through animation
+* position: the position of the card in the list. If specified, the theme will eagerly load the first 3 cards images
 * show_badges: show or not the badges (default to true if nothing is set).
 * show_rating: show or not the rating. If nothing is set, the theme uses the default product card setting
 * show_vendor: show or not the vendor. If nothing is set, the theme uses the default product card setting
@@ -66,8 +67,16 @@ Supported variables
           {%- endif -%}
         {%- endcapture -%}
 
+        {%- liquid
+          assign main_media_loading_strategy = nil
+          
+          if section.index > 3 or position > 3
+            assign main_media_loading_strategy = 'lazy'
+          endif
+        -%}
+
         {%- capture main_image_classes -%}product-card__image product-card__image--primary {% if settings.product_image_aspect_ratio contains 'crop' %}object-cover{% endif %} aspect-{{ settings.product_image_aspect_ratio | split: '_' | first }}{%- endcapture -%}
-        {{- product.featured_media | image_url: width: product.featured_media.width | image_tag: loading: 'lazy', sizes: sizes, widths: '200,300,400,500,600,700,800,1000,1200,1400,1600,1800', class: main_image_classes -}}
+        {{- product.featured_media | image_url: width: product.featured_media.width | image_tag: loading: main_media_loading_strategy, sizes: sizes, widths: '200,300,400,500,600,700,800,1000,1200,1400,1600,1800', class: main_image_classes -}}
 
         {%- if show_secondary_image and product.media.size > 1 -%}
           {%- assign next_media = product.media[product.featured_media.position] | default: product.media[1] -%}
@@ -77,15 +86,17 @@ Supported variables
 
       {%- if show_quick_buy and product.available -%}
         {%- if product.variants.size == 1 and product.selling_plan_groups.size == 0 -%}
-          {%- form 'product', product, is: 'product-form' -%}
-            <input type="hidden" name="on_success" value="force_open_drawer">
-            <input type="hidden" name="quantity" value="1">
-            <input type="hidden" name="id" value="{{ product.selected_or_first_available_variant.id }}">
-            <button type="submit" class="product-card__quick-add-button">
-              <span class="sr-only">{{ 'product.general.add_to_cart_button' | t }}</span>
-              {%- render 'icon' with 'plus' -%}
-            </button>
-          {%- endform -%}
+          <product-form>
+            {%- form 'product', product -%}
+              <input type="hidden" name="on_success" value="force_open_drawer">
+              <input type="hidden" name="quantity" value="1">
+              <input type="hidden" name="id" value="{{ product.selected_or_first_available_variant.id }}">
+              <button type="submit" class="product-card__quick-add-button">
+                <span class="sr-only">{{ 'product.general.add_to_cart_button' | t }}</span>
+                {%- render 'icon' with 'plus' -%}
+              </button>
+            {%- endform -%}
+          </product-form>
         {%- else -%}
           {%- capture quick_buy_id -%}product-quick-buy-{{ section.id }}-{{ block.id }}-{{ quick_buy_context }}-{{ product.id }}{%- endcapture -%}
 
@@ -143,27 +154,18 @@ Supported variables
       {%- for color_label in color_label_list -%}
         {%- if product.options_by_name[color_label] != blank -%}
           {%- assign product_option = product.options_by_name[color_label] -%}
-          {%- capture name -%}swatch-{{ quick_buy_context }}-{{ section.id }}-{{ product.id }}-{{ product_option.position }}{%- endcapture -%}
 
           {%- case settings.product_color_display -%}
             {%- when 'count' -%}
               <p class="smallcaps text-subdued">{{- 'product.general.available_colors_count' | t: count: product_option.values.size -}}</p>
 
             {%- when 'swatch' -%}
-              <fieldset class="h-stack wrap justify-center gap-1" data-option-position="{{ product_option.position }}">
+              <fieldset class="h-stack wrap justify-center gap-1">
+                {%- capture param_name -%}swatch-{{ quick_buy_context }}-{{ section.id }}-{{ product.id }}-{{ product_option.position }}{%- endcapture -%}
+
                 {%- liquid
                   for option_value in product_option.values
-                    if forloop.first or product.selected_or_first_available_variant.matched and option_value == product_option.selected_value
-                      assign selected = true
-                    else
-                      assign selected = false
-                    endif
-
-                    if option_value.swatch != nil
-                      render 'option-value', type: 'swatch', swatch: option_value.swatch, value: option_value, name: name, selected: selected, size: 'sm'
-                    else
-                      render 'option-value', type: 'swatch', value: option_value, name: name, selected: selected, size: 'sm'
-                    endif
+                    render 'option-value', type: 'swatch', option_value: option_value, param_name: param_name, option_position: product_option.position, output_variant_media: true, size: 'sm'
                   endfor
                 -%}
               </fieldset>

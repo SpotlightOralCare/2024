@@ -81,10 +81,19 @@
       <multiple-media-with-text {% if section.settings.reveal_on_scroll %}reveal-on-scroll="true"{% endif %} class="multiple-media-with-text {% if use_overlap_layout %}multiple-media-with-text--overlap{% endif %} {% if section.settings.media_position_desktop == 'after_text' %}multiple-media-with-text--reverse{% endif %}">
         <div class="multiple-media-with-text__media-wrapper">
           {%- for block in section.blocks -%}
+            
             <div {{ block.shopify_attributes }} class="align-self-{{ section.settings.media_alignment }}" style="--media-rotate: {{ block.settings.rotation }}deg; {% if forloop.first %}{% if section.settings.media_alignment == 'start' %}grid-row-start: offset-end;{% elsif section.settings.media_alignment == 'end' %}grid-row-end: main-end;{% endif %}{% endif %}">
               {%- if block.type == 'image' and block.settings.image -%}
+                {%- liquid
+                  assign loading_strategy = nil
+
+                  if section.index <= 3 and forloop.first
+                    assign loading_strategy = 'eager'
+                  endif
+                -%}
+
                 {%- capture sizes_attribute -%}(max-width: 699px) 50vw, 500px{%- endcapture -%}
-                {{- block.settings.image | image_url: width: block.settings.image.width | image_tag: loading: 'lazy', sizes: sizes_attribute, widths: '200,300,400,500,600,800,1000,1200' -}}
+                {{- block.settings.image | image_url: width: block.settings.image.width | image_tag: loading: loading_strategy, sizes: sizes_attribute, widths: '200,300,400,500,600,800,1000,1200' -}}
               {%- elsif block.type == 'video' and block.settings.video -%}
                 {%- render 'media', media: block.settings.video, autoplay: true, loop: true -%}
               {%- else -%}

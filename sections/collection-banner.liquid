@@ -51,10 +51,6 @@
 
     <div class="content-over-media content-over-media--{{ section.settings.image_size }}">
       <picture>
-        {%- if section.settings.enable_parallax -%}
-          {%- assign is_attribute = 'image-parallax' -%}
-        {%- endif -%}
-
         {%- if section.settings.mobile_image != blank -%}
           <source
               media="(max-width: 699px)"
@@ -65,7 +61,14 @@
         {%- endif -%}
 
         {%- assign image = section.settings.image | default: collection.image -%}
-        {{- image | image_url: width: image.width | image_tag: is: is_attribute, fetchpriority: 'high', widths: '300,400,500,600,700,800,900,1000,1200,1400,1600,1800,2000,2200,2400,2600,2800,3000,3200' -}}
+
+        {%- if section.settings.enable_parallax -%}
+          <image-parallax class="contents">
+            {{- image | image_url: width: image.width | image_tag: fetchpriority: 'high', widths: '300,400,500,600,700,800,900,1000,1200,1400,1600,1800,2000,2200,2400,2600,2800,3000,3200' -}}
+          </image-parallax>
+        {%- else -%}
+          {{- image | image_url: width: image.width | image_tag: fetchpriority: 'high', widths: '300,400,500,600,700,800,900,1000,1200,1400,1600,1800,2000,2200,2400,2600,2800,3000,3200' -}}
+        {%- endif -%}
       </picture>
 
       <div class="prose text-center">

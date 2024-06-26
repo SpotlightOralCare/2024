@@ -25,9 +25,11 @@ therefore using a different structure for the Shadow DOM template
 
     <div part="content">
       <header part="header">
-        <button type="button" is="dialog-close-button" part="close-button tap-area" aria-label="{{ 'general.accessibility.close' | t | escape }}">
-          {%- render 'icon' with 'close', width: 16 -%}
-        </button>
+        <dialog-close-button class="contents">
+          <button type="button" part="close-button tap-area" aria-label="{{ 'general.accessibility.close' | t | escape }}">
+            {%- render 'icon' with 'close', width: 16 -%}
+          </button>
+        </dialog-close-button>
       </header>
 
       <div part="panel-list">
@@ -124,18 +126,20 @@ therefore using a different structure for the Shadow DOM template
                 {%- for sub_link in link.links -%}
                   <li>
                     {%- if sub_link.links.size > 0 -%}
-                      <details is="accordion-disclosure" class="group">
-                        <summary class="header-sidebar__linklist-button {% if section.settings.sidebar_text_font == 'heading' %}h6{% endif %}">
-                          {{- sub_link.title -}}
-                          <span class="animated-plus group-expanded:rotate" aria-hidden="true"></span>
-                        </summary>
+                      <accordion-disclosure>
+                        <details class="accordion__disclosure group">
+                          <summary class="header-sidebar__linklist-button {% if section.settings.sidebar_text_font == 'heading' %}h6{% endif %}">
+                            {{- sub_link.title -}}
+                            <span class="animated-plus group-expanded:rotate" aria-hidden="true"></span>
+                          </summary>
 
-                        <div class="header-sidebar__nested-linklist">
-                          {%- for sub_sub_link in sub_link.links -%}
-                            <a href="{{ sub_sub_link.url }}" class="link-faded-reverse">{{ sub_sub_link.title }}</a>
-                          {%- endfor -%}
-                        </div>
-                      </details>
+                          <div class="header-sidebar__nested-linklist">
+                            {%- for sub_sub_link in sub_link.links -%}
+                              <a href="{{ sub_sub_link.url }}" class="link-faded-reverse">{{ sub_sub_link.title }}</a>
+                            {%- endfor -%}
+                          </div>
+                        </details>
+                      </accordion-disclosure>
                     {%- else -%}
                       <a href="{{ sub_link.url }}" class="header-sidebar__linklist-button {% if section.settings.sidebar_text_font == 'heading' %}h6{% endif %}">
                         {{- sub_link.title -}}

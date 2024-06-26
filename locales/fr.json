@@ -99,7 +99,7 @@
       "view_in_space": "Afficher dans votre espace",
       "taxes_included": "Taxes inclues",
       "taxes_excluded": "Taxes exclues",
-      "shipping_policy_html": "<a href=\"{{ link }}\" class=\"link\">Frais d'envoi calculés<\/a> à la caisse",
+      "shipping_policy_html": "<a href=\"{{ link }}\" class=\"link\">Frais d'envoi calculés<\/a> au paiement",
       "size_chart": "Guide des tailles",
       "available_colors_count": {
         "one": "{{ count }} couleur",
@@ -306,7 +306,7 @@
       "billing_address": "Adresse de facturation"
     },
     "addresses": {
-      "title": "Addresses",
+      "title": "Adresses",
       "no_addresses": "Vous n'avez aucune adresse enregistrée.",
       "add_address": "Ajouter une adresse",
       "edit_address": "Modifier une adresse",
@@ -414,7 +414,7 @@
     },
     "issued": {
       "remaining_amount": "Montant restant",
-      "redeem_instructions": "Rentrez code code à la caisse pour utiliser votre carte cadeau :",
+      "redeem_instructions": "Rentrez ce code au moment du paiement pour utiliser votre carte cadeau :",
       "code": "Code de la carte cadeau",
       "amount": "Montant : {{ initial_value }}",
       "expires_on": "Expires on: {{ expires_on }}",

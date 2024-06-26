@@ -37,10 +37,12 @@
       {%- assign carousel_id = 'carousel-' | append: section.id -%}
 
       {%- if section.blocks.size > 1 -%}
-        <button type="button" is="carousel-prev-button" class="tap-area" aria-controls="{{ carousel_id }}">
-          <span class="sr-only">{{ 'general.accessibility.previous' | t }}</span>
-          {%- render 'icon' with 'arrow-left', width: 12, direction_aware: true -%}
-        </button>
+        <carousel-prev-button aria-controls="{{ carousel_id }}" class="contents">
+          <button type="button" class="tap-area">
+            <span class="sr-only">{{ 'general.accessibility.previous' | t }}</span>
+            {%- render 'icon' with 'arrow-left', width: 12, direction_aware: true -%}
+          </button>
+        </carousel-prev-button>
       {%- endif -%}
 
       <announcement-bar-carousel allow-swipe {% if section.settings.autoplay %}autoplay="{{ section.settings.cycle_speed }}"{% endif %} id="{{ carousel_id }}" class="announcement-bar__carousel">
@@ -50,10 +52,12 @@
       </announcement-bar-carousel>
 
       {%- if section.blocks.size > 1 -%}
-        <button type="button" is="carousel-next-button" class="tap-area" aria-controls="{{ carousel_id }}">
-          <span class="sr-only">{{ 'general.accessibility.next' | t }}</span>
-          {%- render 'icon' with 'arrow-right', width: 12, direction_aware: true -%}
-        </button>
+        <carousel-next-button aria-controls="{{ carousel_id }}" class="contents">
+          <button type="button" class="tap-area">
+            <span class="sr-only">{{ 'general.accessibility.next' | t }}</span>
+            {%- render 'icon' with 'arrow-right', width: 12, direction_aware: true -%}
+          </button>
+        </carousel-next-button>
       {%- endif -%}
     </div>
   </height-observer>
